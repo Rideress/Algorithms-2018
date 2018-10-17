@@ -2,6 +2,8 @@ package lesson1;
 
 import kotlin.NotImplementedError;
 
+import java.io.*;
+
 @SuppressWarnings("unused")
 public class JavaTasks {
     /**
@@ -11,7 +13,7 @@ public class JavaTasks {
      * (Модифицированная задача с сайта acmp.ru)
      *
      * Во входном файле с именем inputName содержатся моменты времени в формате ЧЧ:ММ:СС,
-     * каждый на отдельной строке. Пример:
+     * каждый на отдельной Пример:
      *
      * 13:15:19
      * 07:26:57
@@ -32,9 +34,36 @@ public class JavaTasks {
      *
      * В случае обнаружения неверного формата файла бросить любое исключение.
      */
+
+
     static public void sortTimes(String inputName, String outputName) {
-        throw new NotImplementedError();
+        try (
+                BufferedReader br = new BufferedReader(new FileReader("C:\\Users\\Роман\\Desktop\\notes.txt"))) {
+            String s;
+            while ((s = br.readLine()) != null) {
+                int[] times = new int[0];
+                String[] timesInteger = s.split(":");
+                int result = 0;
+                for (String part : timesInteger) {
+                    int number = Integer.parseInt(part);
+                    result = result * 60 + number;
+                }
+                try(BufferedWriter bw = new BufferedWriter(new FileWriter("C:\\Users\\Роман\\Desktop\\notes4.txt")))
+                {
+                    for(String i: timesInteger){ bw.write(i);}
+                }
+                catch(IOException ex){
+
+                    System.out.println(ex.getMessage());
+                }
+                System.out.println("notes4.txt");
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
+
 
     /**
      * Сортировка адресов
