@@ -3,6 +3,8 @@ package lesson1;
 import kotlin.NotImplementedError;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.Comparator;
 
 @SuppressWarnings("unused")
 public class JavaTasks {
@@ -33,36 +35,64 @@ public class JavaTasks {
      * 19:56:14
      *
      * В случае обнаружения неверного формата файла бросить любое исключение.
+     *
+     *
+     *
+     *В лучшем случае сложность равна - O(n), в среднем случае - O(n*log(n)), в худшем случчае - O(n*log(n))
+     * Ресурсоемкость равна R(n)
      */
 
 
     static public void sortTimes(String inputName, String outputName) {
-        try (
-                BufferedReader br = new BufferedReader(new FileReader("C:\\Users\\Роман\\Desktop\\notes.txt"))) {
-            String s;
-            while ((s = br.readLine()) != null) {
-                int[] times = new int[0];
-                String[] timesInteger = s.split(":");
-                int result = 0;
-                for (String part : timesInteger) {
-                    int number = Integer.parseInt(part);
-                    result = result * 60 + number;
-                }
-                try(BufferedWriter bw = new BufferedWriter(new FileWriter("C:\\Users\\Роман\\Desktop\\notes4.txt")))
-                {
-                    for(String i: timesInteger){ bw.write(i);}
-                }
-                catch(IOException ex){
+        try (BufferedReader br = new BufferedReader(new FileReader(inputName))) {
+            class Pair {
+                public String inputTime;
+                public int timeValue;
 
-                    System.out.println(ex.getMessage());
+                public String getInputTime() {
+                    return inputTime;
                 }
-                System.out.println("notes4.txt");
+
+                public int getTimeValue() {
+                    return timeValue;
+                }
+
+                public Pair(String inputTime, int timeValue) {
+                    this.inputTime = inputTime;
+                    this.timeValue = timeValue;
+                }
+
+            }
+
+            String s;
+            String[] tempTimes;
+            ArrayList<Pair> listOfPair = new ArrayList<>();
+            while ((s = br.readLine()) != null) {
+                if (!s.matches("(([01]\\d)|2[0-3]):[0-5]\\d:[0-5]\\d")) {
+                    throw new IllegalAccessError();
+                } else {
+                    tempTimes = s.split(":");
+                    int result = 0;
+                    for (String part : tempTimes) {
+                        int number = Integer.parseInt(part);
+                        result = result * 60 + number;
+                    }
+                    Pair newPair = new Pair(s, result);
+                    listOfPair.add(newPair);
+                }
+            }
+            listOfPair.sort(Comparator.comparingInt(Pair::getTimeValue));
+
+            try (BufferedWriter bw = new BufferedWriter(new FileWriter(outputName))) {
+
+                for (Pair i: listOfPair){ bw.append(i.inputTime).append("\r\n");}
             }
 
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
 
 
     /**
@@ -175,8 +205,30 @@ public class JavaTasks {
      * second = [null null null null null 1 3 9 13 18 23]
      *
      * Результат: second = [1 3 4 9 9 13 15 20 23 28]
+     *
+     * Сложность алгоритма равна O(n), так как сравнение двух переменных это O(c), а перебор по массиву это O(n).
+     *
+     * Ресурсоемкость - R(n)
      */
-    static <T extends Comparable<T>> void mergeArrays(T[] first, T[] second) {
-        throw new NotImplementedError();
+    static <T extends Comparable<T>> void mergeArrays(Integer[] first, Integer[] second) {
+        int i = 0; //index of first array
+        int k = 0; //index of result
+        int j = first.length; //index of second array
+        while (i < first.length && j < second.length) {
+            if (first[i] < second[j]){
+                second[k] = first[i];
+                i++;
+                k++;
+            } else {
+                second[k] = second[j];
+                j++;
+                k++;
+            }
+            if (j == second.length && i < first.length)
+                for (int p = i; p < first.length; p++) {
+                    second[k++] = first[p];
+                }
+
+        }
     }
 }

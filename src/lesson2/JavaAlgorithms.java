@@ -80,9 +80,25 @@ public class JavaAlgorithms {
      * Х Х 3
      * Х   Х
      * Х х Х
+     *
+     *
+     *
+     *
+     *
+     * Сложность выполнения данного алгоритма равна линейной - O(n).
+     * Ресурсоемкость R(1).
+     *
      */
     static public int josephTask(int menNumber, int choiceInterval) {
-        throw new NotImplementedError();
+        if (menNumber == 1) {
+            return 1;
+        }
+        int result = 0;
+        for (int i = 1; i <= menNumber; i++) {
+            result = (result + choiceInterval) % i;
+        }
+        result++;
+        return result;
     }
 
     /**
@@ -96,9 +112,8 @@ public class JavaAlgorithms {
      * Если имеется несколько самых длинных общих подстрок одной длины,
      * вернуть ту из них, которая встречается раньше в строке first.
      */
-    static public String longestCommonSubstring(String firs, String second) {
-        throw new NotImplementedError();
-    }
+    static public String longestCommonSubstring(String first, String second) { throw new NotImplementedError(); }
+
 
     /**
      * Число простых чисел в интервале
@@ -109,10 +124,28 @@ public class JavaAlgorithms {
      *
      * Справка: простым считается число, которое делится нацело только на 1 и на себя.
      * Единица простым числом не считается.
+     *
+     *
+     *
+     * При решении задачи используется решето Эратосфена, сложность алгоритма равна O(n*log(log(n)))
+     * Ресурсоемкость данной программы - R(n).
      */
-    static public int calcPrimesNumber(int limit) {
-        throw new NotImplementedError();
+    static public int calcPrimesNumber(int limit){
+        if (limit <= 1){return 0;}
+    boolean[] isComposite = new boolean[limit + 1];
+        for (int i = 2; i * i <= limit; i++) {
+        if (!isComposite [i]) {
+            for (int j = i; i * j <= limit; j++) {
+                isComposite [i*j] = true;
+            }
+        }
     }
+    int numberOfPrimes = 0;
+        for (int i = 2; i <= limit; i++) {
+        if (!isComposite [i]) numberOfPrimes++;
+    }
+        return numberOfPrimes;
+}
 
     /**
      * Балда
